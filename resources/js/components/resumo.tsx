@@ -4,15 +4,15 @@ export default function Resumo() {
             <div className="bg-white p-4 rounded-2xl shadow-sm mb-6">
                 <h2 className="text-lg font-medium mb-2">Resumo</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-gray-50 rounded-xl">
                         <p className="text-sm text-gray-500">Saldo</p>
                         <p className="text-xl font-semibold">R$ 0</p>
                     </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-gray-50 rounded-xl">
                         <p className="text-sm text-gray-500">Último depósito</p>
                         <p className="text-lg">R$ 0</p>
                     </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="p-4 bg-gray-50 rounded-xl">
                         <p className="text-sm text-gray-500">Transferências</p>
                         <p className="text-lg">2</p>
                     </div>
