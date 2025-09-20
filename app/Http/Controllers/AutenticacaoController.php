@@ -12,20 +12,20 @@ class AutenticacaoController extends Controller
 {
     public function cadastrarUsuario(Request $request)
     {
-        $validator = $request->validate([
+        $dadosUsuario = $request->validate([
             'nome' => 'required|max:60',
             'email' => 'required|email|unique:usuarios',
             'senha' => 'required|confirmed:confirmarSenha',
             'confirmarSenha' => 'required'
         ]);
-        $senha = Hash::make($request->senha);
-        $usuario = Usuario::create([
-            'nome' => $request->nome,
-            'email' => $request->email,
+        $senha = Hash::make($dadosUsuario['senha']);
+        Usuario::create([
+            'nome' => $dadosUsuario['nome'],
+            'email' => $dadosUsuario['email'],
             'senha' => $senha
         ]);
 
-        return response()->json($usuario, 201);
+        return response()->json([], 201);
     }
 
     public function autenticar(Request $request)
@@ -47,11 +47,12 @@ class AutenticacaoController extends Controller
         }
 
         $request->session()->regenerate();
-        $usuario = Usuario::where('email', '=', $request->email)->first();
-        
-        if ($usuario?->validarSenha($request->senha)) {
-            return response()->json($usuario);
-        }
+        $usuario = $request->user();
+
+        return response()->json([
+            'nome' => $usuario->nome,
+            'email' => $usuario->email
+        ]);
     }
     public function encerrarSessao(Request $request)
     {

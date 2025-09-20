@@ -17,14 +17,6 @@ class DepositoController extends Controller
         ]);
 
         $usuario = $request->user();
-        // $buscarUsuarioDestino = Usuario::where('email', '=', $validarDados['email'])->first();
-
-        // if(!$buscarUsuarioDestino) {
-        //     return response()->json([
-        //         'sucesso' => false,
-        //         'mensagem' => 'Usuário não encontrado'
-        //     ]);
-        // }
         $deposito = Deposito::create([
             'usuario_id' => $usuario->id,
             'valor' => $validarDados['valor'],

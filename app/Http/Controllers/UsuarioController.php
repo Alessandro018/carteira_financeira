@@ -8,55 +8,21 @@ use App\Models\Usuario;
 
 class UsuarioController extends Controller
 {
-    public function criar(Request $request)
+    public function transacoes(Request $request)
     {
-        $validator = $request->validate([
-            'nome' => 'required|max:60',
-            'email' => 'required|email|unique:usuarios',
-            'senha' => 'required|confirmed:confirmarSenha',
-            'confirmarSenha' => 'required'
-        ]);
-        $usuario = Usuario::create($request->all());
-        return response()->json($usuario, 201);
-    }
+        $usuario = $request->user();
+        $transacoes = $usuario->load(['depositos', 'transferencias']);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return response()->json(
+            [
+                'depositos' => $transacoes['depositos'],
+                'transferencias' => $transacoes['transferencias']
+            ]
+        );
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function saldo(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $usuario = $request->user();
+        return response()->json($usuario->saldo);
     }
 }

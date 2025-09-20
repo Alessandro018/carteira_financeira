@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Deposito extends Model
+class Transferencia extends Model
 {
-    protected $table = 'depositos';
+    protected $table = 'transferencias';
     protected $primaryKey = 'id';
-    public $timestamps = false;
     const CREATED_AT = 'data_hora_criacao';
     const UPDATED_AT = 'data_hora_atualizacao';
-
     protected $fillable = [
         'usuario_id',
+        'usuario_destino_id',
         'valor',
         'descricao',
         'status'

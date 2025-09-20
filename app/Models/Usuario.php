@@ -36,11 +36,6 @@ class Usuario extends Authenticatable
         return Hash::check($senha, $this->senha);
     }
     
-
-    // public function transferencias()
-    // {
-    //     return $this->hasMany(Transferencia::class);
-    // }
     public function depositos()
     {
         return $this->hasMany(Deposito::class);
@@ -49,5 +44,9 @@ class Usuario extends Authenticatable
     {
         $this->saldo += $valor;
         $this->save();
+    }
+    public function transferencias()
+    {
+        return $this->hasMany(Transferencia::class);
     }
 }

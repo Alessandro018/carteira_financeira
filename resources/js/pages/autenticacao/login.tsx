@@ -16,8 +16,8 @@ export default function Login() {
         const response = await autenticarApi({email: email, senha: senha});
         setAutenticando(false);
         
-        if(response.status === 200) {
-            sessionStorage.setItem('usuario', JSON.stringify(response.data));
+        if(response.data?.email) {
+            sessionStorage.setItem('usuario_carteira', JSON.stringify(response.data));
             window.location.href = '/dashboard';
         }
     }
