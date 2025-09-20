@@ -1,38 +1,33 @@
 import Input from "@/components/ui/input";
-import axios from "axios";
-import React, { useRef } from "react";
+import { cadastrarUsuarioApi } from "@/service/usuarioService";
+import React, { useRef, useState } from "react";
 
 export default function PaginaTransferencia() {
     const referenciaCampoNome = useRef<HTMLInputElement>(null);
     const referenciaCampoEmail = useRef<HTMLInputElement>(null);
     const referenciaCampoSenha = useRef<HTMLInputElement>(null);
     const referenciaCampoConfirmar = useRef<HTMLInputElement>(null);
+    const [cadastrando, setCadastrando] = useState(false);
 
     const cadastrar = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        const nome = referenciaCampoNome.current?.value;
-        const email = referenciaCampoEmail.current?.value;
-        const senha = referenciaCampoSenha.current?.value;
-        const confirmarSenha = referenciaCampoConfirmar.current?.value;
-        const tokenCsrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const nome = referenciaCampoNome.current!.value;
+        const email = referenciaCampoEmail.current!.value;
+        const senha = referenciaCampoSenha.current!.value;
+        const confirmarSenha = referenciaCampoConfirmar.current!.value;
 
-        const response = await axios({
-            url: '/api/v1/conta/cadastrar',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': tokenCsrf
-            },
-            data: JSON.stringify({
-                nome,
-                email,
-                senha,
-                confirmarSenha
-            }),
-        })
-        console.log(response);
+        setCadastrando(true);
+        const response = await cadastrarUsuarioApi({nome, email, senha, confirmarSenha}).catch((error) => {
+            if(error.response.status === 422) {
+                alert(error.response.data.errors[0].msg);
+            }
+        });
+        setCadastrando(false);
+
+        if(response?.status === 201) {
+            window.location.href = '/login';
+        }
     }
 
     return (
@@ -63,8 +58,11 @@ export default function PaginaTransferencia() {
                             </div>
                             <a href="/" className="text-sm text-gray-500 hover:underline">Já tenho uma conta</a>
                             <div className="flex gap-2 pt-3">
-                                <button type="submit" className="flex-1 inline-flex justify-center hover:cursor-pointer items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700">
-                                    Cadastrar
+                                <button
+                                    type="submit"
+                                    className="flex-1 inline-flex justify-center hover:cursor-pointer items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700"
+                                    disabled={cadastrando}>
+                                    {cadastrando ? 'Aguarde...' : 'Cadastrar'}
                                 </button>
                             </div>
                         </form>

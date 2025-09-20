@@ -7,6 +7,9 @@ use App\Http\Controllers\AutenticacaoController;
 Route::get('/', function () {
     return Inertia::render('autenticacao/login');
 });
+Route::get('/login', function () {
+    return Inertia::render('autenticacao/login');
+});
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/dashboard', function () {
         return Inertia::render('dashboard');

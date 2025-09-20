@@ -7,7 +7,6 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class AutenticacaoController extends Controller
 {
@@ -26,11 +25,7 @@ class AutenticacaoController extends Controller
             'senha' => $senha
         ]);
 
-        $token = $usuario->createToken('auth_token')->plainTextToken;
-        return response()->json([
-            "usuario"=> $usuario,
-            "token" => $token
-        ], 201);
+        return response()->json($usuario, 201);
     }
 
     public function autenticar(Request $request)
@@ -60,17 +55,13 @@ class AutenticacaoController extends Controller
     }
     public function encerrarSessao(Request $request)
     {
-        $token = $request->bearerToken();
-        $tokenAcesso = PersonalAccessToken::findToken($token);
+        Auth::guard('web')->logout();
 
-        if(!$tokenAcesso) {
-            return response()->json([
-                'sucesso' => false,
-                'mensagem' => 'Token inválido'
-            ]);
-        }
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        $tokenAcesso->delete();
+        // $request->user()->currentAccessToken()->delete();
+
         return response()->json([
             'sucesso' => true,
             'mensagem' => 'Logout realizado com sucesso'

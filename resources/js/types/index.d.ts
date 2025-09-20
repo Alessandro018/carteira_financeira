@@ -1,8 +1,10 @@
-export interface User {
+export interface Usuario {
     id: number;
-    name: string;
+    nome: string;
     email: string;
-    email_verified_at?: string;
+    saldo: number;
+    data_criacao: string;
+    data_atualizacao: string;
 }
 
 export type PageProps<

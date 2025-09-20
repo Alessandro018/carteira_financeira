@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('usuarios', function (Blueprint $table) {
@@ -16,8 +13,9 @@ return new class extends Migration
             $table->string('nome', 60);
             $table->string('email', 60)->unique();
             $table->string('senha');
-            $table->date('dataCriacao');
-            $table->date('dataAtualizacao');
+            $table->float('saldo')->default(0);
+            $table->date('data_criacao');
+            $table->date('data_atualizacao');
             $table->timestamps();
         });
     }
