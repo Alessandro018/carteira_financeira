@@ -15,19 +15,38 @@ class TransferenciaController extends Controller
             'email' => 'required|email',
             'valor' => 'required|numeric',
             'descricao' => 'max:80',
+        ], [
+            'email.required' => 'O campo email é obrigatório',
+            'email.email' => 'O campo email deve ser um email válido',
+            'valor.required' => 'O campo valor é obrigatório',
+            'valor.numeric' => 'O campo valor deve ser um número válido',
+            'descricao.max' => 'O campo descrição deve ter no máximo 80 caracteres',
         ]);
+
+        if($dadosTransferencia['valor'] <= 0) {
+            return response()->json([
+                'sucesso' => false,
+                'erros' => [
+                    'valor' => ['O valor da transferência deve ser maior que zero']
+                ]
+            ]);
+        }
 
         if($dadosTransferencia['email'] == $request->user()->email) {
             return response()->json([
                 'sucesso' => false,
-                'mensagem' => 'Você não pode transferir para você mesmo'
+                'erros' => [
+                    'email' => ['Você não pode transferir para você mesmo']
+                ]
             ]);
         }
 
         if($request->user()->saldo < $dadosTransferencia['valor']) {
             return response()->json([
                 'sucesso' => false,
-                'mensagem' => 'Saldo insuficiente'
+                'erros' => [
+                    'valor' => ['Saldo insuficiente']
+                ]
             ]);
         }
 
@@ -36,7 +55,9 @@ class TransferenciaController extends Controller
         if(!$usuarioDestino) {
             return response()->json([
                 'sucesso' => false,
-                'mensagem' => 'Usuário não encontrado'
+                'erros' => [
+                    'email' => ['Usuário não encontrado']
+                ]
             ]);
         }
         $usuario = $request->user();

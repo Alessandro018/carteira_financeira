@@ -2,12 +2,11 @@ import Cabecalho from "@/components/cabecalho";
 import CardSaldoCategoria from "@/components/cardSaldoCategoria";
 import Resumo from "@/components/resumo";
 import { saldoApi, transacoesApi } from "@/service/usuarioService";
-import { Deposito, Transferencia } from "@/types";
+import { Deposito } from "@/types";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
     const [receitas, setReceitas] = useState<Deposito[]>([]);
-    const [despesas, setDespesas] = useState<Transferencia[]>([]);
     const [saldo, setSaldo] = useState(0);
     // const [quantidadeTransicoes, setQuantidadeTransacoes] = useState(0);
     const [totalReceitas, setTotalReceitas] = useState(0);
@@ -18,16 +17,13 @@ export default function Dashboard() {
             const buscarTransacoes = await transacoesApi();
             const buscarSaldo = await saldoApi();
             setReceitas(buscarTransacoes.depositos);
-            setDespesas(buscarTransacoes.transferencias);
             setSaldo(buscarSaldo);
 
             const calcularReceitas = buscarTransacoes.depositos.length > 0 ? buscarTransacoes.depositos!.reduce((valor, deposito) => valor + deposito.valor, 0) : 0;
             const calcularDespesas = buscarTransacoes.transferencias.length > 0 ? buscarTransacoes.transferencias!.reduce((valor, transferencia) => valor + transferencia.valor, 0) : 0;
             setTotalReceitas(calcularReceitas);
             setTotalDespesas(calcularDespesas);
-            // setQuantidadeTransacoes(buscarTransacoes.depositos.length + buscarTransacoes.transferencias.length);
         })();
-        console.log(despesas);
     }, []);
     const valorUltimaTransacao = receitas?.[0]?.valor ?? 0;
     

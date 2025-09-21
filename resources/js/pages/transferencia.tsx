@@ -8,6 +8,7 @@ export default function PaginaTransferencia() {
     const referenciaCampoValor = useRef<HTMLInputElement>(null);
     const referenciaCampoDescricao = useRef<HTMLInputElement>(null);
     const [transferindo, setTransferindo] = useState(false);
+    const [erros, setErros] = useState<{ [key: string]: string[] }>({});
 
     const transferir = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -17,11 +18,25 @@ export default function PaginaTransferencia() {
         const valor = Number(referenciaCampoValor.current!.value);
         const descricao = referenciaCampoDescricao.current!.value;
 
-        const response = await transferirApi({email, valor, descricao});
+        const response = await transferirApi({email, valor, descricao}).catch((error) => {
+            if(error.response.status === 422) {
+                setErros(error.response.data.errors);
+            }
+        });
         setTransferindo(false);
 
-        if(response.status === 201) {
-            window.location.href = '/dashboard';
+        switch(response?.status) {
+            case 200:
+                if(response.data.mensagem) {
+                    alert(response.data.mensagem);
+                } else {
+                    setErros(response.data.erros);
+                }
+                break;
+            case 201:
+                alert('Transferência realizada com sucesso!');
+                window.location.href = '/dashboard';
+                break;
         }
     }
 
@@ -36,15 +51,16 @@ export default function PaginaTransferencia() {
                             <div>
                                 <label className="block text-sm font-medium mb-1">Para</label>
                                 <Input type="email" ref={referenciaCampoEmail} placeholder="Nome ou e-mail do destinatário"
-                                   required/>
+                                   erro={erros.email?.[0]} required/>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Valor (R$)</label>
-                                <Input type="number" ref={referenciaCampoValor} placeholder="0,00" required/>
+                                <Input type="number" ref={referenciaCampoValor} placeholder="0,00" min={1} step={0.01}
+                                   erro={erros.valor?.[0]} required/>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Descrição (opcional)</label>
-                                <Input ref={referenciaCampoDescricao}/>
+                                <Input type="text" ref={referenciaCampoDescricao} erro={erros.descricao?.[0]}/>
                             </div>
                             <div className="flex gap-2">
                                 <button

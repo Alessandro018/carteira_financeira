@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deposito;
-use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class DepositoController extends Controller
@@ -14,7 +13,20 @@ class DepositoController extends Controller
         $validarDados = $request->validate([
             'valor' => 'required|numeric',
             'descricao' => 'max:80'
+        ], [
+            'valor.required' => 'O campo valor é obrigatório',
+            'valor.numeric' => 'O campo valor deve ser um número válido',
+            'descricao.max' => 'O campo descrição deve ter no máximo 80 caracteres'
         ]);
+
+        if($validarDados['valor'] <= 0) {
+            return response()->json([
+                'sucesso' => false,
+                'erros' => [
+                    'valor' => ['O valor do depósito deve ser maior que zero']
+                ]
+            ]);
+        }
 
         $usuario = $request->user();
         $deposito = Deposito::create([

@@ -3,10 +3,11 @@ import { useRef, useState } from "react";
 import { depositarApi } from "@/service/contaService";
 import Cabecalho from "@/components/cabecalho";
 
-export default function Deposito() {
+export default function PaginaDeposito() {
     const referenciaCampoValor = useRef<HTMLInputElement>(null);
     const referenciaCampoDescricao = useRef<HTMLInputElement>(null);
     const [depositando, setDepositando] = useState(false);
+    const [erros, setErros] = useState<{ [key: string]: string[] }>({});
 
     const depositar = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -15,11 +16,25 @@ export default function Deposito() {
         const valor = Number(referenciaCampoValor.current!.value);
         const descricao = referenciaCampoDescricao.current!.value;
 
-        const response = await depositarApi({valor, descricao});
+        const response = await depositarApi({valor, descricao}).catch((error) => {
+            if(error.response.status === 422) {
+                setErros(error.response.data.errors);
+            }
+        });
         setDepositando(false);
 
-        if(response.status === 201) {
-            window.location.href = '/dashboard';
+        switch(response?.status) {
+            case 200:
+                if(response.data.mensagem) {
+                    alert(response.data.mensagem);
+                } else {
+                    setErros(response.data.erros);
+                }
+                break;
+            case 201:
+                alert('Depósito realizado com sucesso!');
+                window.location.href = '/dashboard';
+                break;
         }
     }
 
@@ -33,20 +48,14 @@ export default function Deposito() {
                         <form onSubmit={(event) => depositar(event)} className="space-y-3">
                             <div>
                                 <label className="block text-sm font-medium mb-1">Valor (R$)</label>
-                                <Input
-                                    type="number"
-                                    step="1"
-                                    min="1"
-                                    placeholder="0.00"
-                                    ref={referenciaCampoValor}
-                                    required
+                                <Input type="number" placeholder="0.00" ref={referenciaCampoValor} min={1} step={0.01}
+                                    erro={erros.valor?.[0]} required
                                 />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Descrição (opcional)</label>
-                                <Input
-                                    placeholder="Ex: Depósito via boleto"
-                                    ref={referenciaCampoDescricao}
+                                <Input type="text" placeholder="Ex: Depósito via boleto" ref={referenciaCampoDescricao}
+                                    erro={erros.descricao?.[0]}
                                 />
                             </div>
                             <button

@@ -15,8 +15,17 @@ class AutenticacaoController extends Controller
         $dadosUsuario = $request->validate([
             'nome' => 'required|max:60',
             'email' => 'required|email|unique:usuarios',
-            'senha' => 'required|confirmed:confirmarSenha',
+            'senha' => 'required|min:5|confirmed:confirmarSenha',
             'confirmarSenha' => 'required'
+        ], [
+            'nome.required' => 'O campo nome é obrigatório',
+            'email.required' => 'O campo email é obrigatório',
+            'email.email' => 'O campo email deve ser um email válido',
+            'email.unique' => 'O email já está cadastrado',
+            'senha.required' => 'O campo senha é obrigatório',
+            'senha.min' => 'A senha deve ter no mínimo :min caracteres',
+            'senha.confirmed' => 'As senhas não conferem',
+            'confirmarSenha.required' => 'O campo confirmar senha é obrigatório'
         ]);
         $senha = Hash::make($dadosUsuario['senha']);
         Usuario::create([
@@ -32,7 +41,12 @@ class AutenticacaoController extends Controller
     {
         $validarCredenciais = $request->validate([
             'email' => 'required|email',
-            'senha' => 'required'
+            'senha' => 'required|min:5'
+        ], [
+            'email.required' => 'O campo email é obrigatório',
+            'email.email' => 'O campo email deve ser um email válido',
+            'senha.required' => 'O campo senha é obrigatório',
+            'senha.min' => 'A senha deve ter no mínimo :min caracteres'
         ]);
 
         $credenciais = [
