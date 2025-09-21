@@ -65,7 +65,7 @@ Aplicação web de carteira financeira construída com **Laravel 12 + React + Ty
   - Para tentar resolver, execute os seguintes comandos no Windows PowerShell:
       ````bash
       reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
-      git config --system core.longpaths true
+      git config --system core.longpaths
   - Em seguida, execute novamente o passo 2
 
 3. Copie o arquivo de ambiente e configure:
