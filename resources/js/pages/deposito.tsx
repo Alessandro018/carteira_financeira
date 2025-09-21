@@ -1,6 +1,7 @@
 import Input from "@/components/ui/input";
 import { useRef, useState } from "react";
 import { depositarApi } from "@/service/contaService";
+import Cabecalho from "@/components/cabecalho";
 
 export default function Deposito() {
     const referenciaCampoValor = useRef<HTMLInputElement>(null);
@@ -24,11 +25,9 @@ export default function Deposito() {
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
-            <div className="w-sm mx-auto">
-                <header className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-semibold">Carteira Financeira</h1>
-                </header>
-                <main className="flex flex-center">
+            <div className="max-w-2xl mx-auto flex flex-col gap-5">
+                <Cabecalho />
+                <main className="grid grid-cols-1 gap-6">
                     <div className="w-full bg-white p-7 rounded-2xl shadow-sm">
                         <h2 className="text-lg font-medium mb-2">Depósito</h2>
                         <form onSubmit={(event) => depositar(event)} className="space-y-3">

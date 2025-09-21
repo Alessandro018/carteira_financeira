@@ -1,3 +1,4 @@
+import Cabecalho from "@/components/cabecalho";
 import Input from "@/components/ui/input";
 import { transferirApi } from "@/service/contaService";
 import { useRef, useState } from "react";
@@ -26,21 +27,20 @@ export default function PaginaTransferencia() {
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
-            <div className="w-sm mx-auto">
-                <header className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-semibold">Carteira Financeira</h1>
-                </header>
-                <main className="flex flex-center">
+            <div className="max-w-2xl mx-auto flex flex-col gap-5">
+                <Cabecalho />
+                <main className="grid grid-cols-1 gap-6">
                     <div className="w-full bg-white p-7 rounded-2xl shadow-sm">
                         <h2 className="text-lg font-medium mb-2">Transferir saldo</h2>
                         <form onSubmit={(event) => transferir(event)} className="space-y-3">
                             <div>
                                 <label className="block text-sm font-medium mb-1">Para</label>
-                                <Input ref={referenciaCampoEmail} placeholder="Nome ou e-mail do destinatário"/>
+                                <Input type="email" ref={referenciaCampoEmail} placeholder="Nome ou e-mail do destinatário"
+                                   required/>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Valor (R$)</label>
-                                <Input ref={referenciaCampoValor} placeholder="0,00"/>
+                                <Input type="number" ref={referenciaCampoValor} placeholder="0,00" required/>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Descrição (opcional)</label>

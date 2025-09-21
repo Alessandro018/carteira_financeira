@@ -25,38 +25,6 @@ export default function Resumo({ saldo, valorUltimoDeposito, quantidadeTransfere
                     </div>
                 </div>
             </div>
-
-            <div className="bg-white p-4 rounded-2xl">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-medium">Histórico de transações</h2>
-                    <div className="text-sm text-gray-500">5 transações</div>
-                </div>
-
-                <div className="space-y-3">
-                    {/* {transactions.map((tx) => (
-                                        <div key={tx.id} className="flex items-center justify-between p-3 rounded-lg border">
-                                            <div>
-                                                <div className="flex items-center gap-3">
-                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${tx.type === 'deposit' ? 'bg-indigo-500' : 'bg-yellow-500'}`}>
-                                                        {tx.type === 'deposit' ? 'D' : 'T'}
-                                                    </div>
-                                                    <div>
-                                                        <div className="font-medium">{tx.type === 'deposit' ? 'Depósito' : 'Transferência'}</div>
-                                                        <div className="text-sm text-gray-500">{tx.note}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="text-right">
-                                                <div className={`font-medium ${tx.amount < 0 ? 'text-red-600' : 'text-green-600'}`}>{formatCurrency(tx.amount)}</div>
-                                                <div className="text-sm text-gray-500">{tx.date}</div>
-                                            </div>
-                                        </div>
-                                    ))} */}
-
-                    {/* {transactions.length === 0 && <div className="text-center text-gray-500 p-4">Nenhuma transação encontrada.</div>} */}
-                </div>
-            </div>
         </section>
     );
 }

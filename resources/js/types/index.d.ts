@@ -31,6 +31,11 @@ export interface Transferencia {
     data_hora_criacao: string;
     data_hora_atualizacao: string;
 }
+export interface Transacao extends Transferencia {
+    usuario_destino_id?: number;
+    tipo: string;
+    status: StatusTransferencia | StatusDeposito;
+}
 
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,

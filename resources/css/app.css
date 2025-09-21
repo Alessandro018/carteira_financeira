@@ -71,3 +71,8 @@
 :root {
     --roundend-circular: 50%;
 }
+.btn-navegacao-ativo {
+    @apply bg-gray-200 text-primary-foreground;
+    cursor: default;
+    pointer-events: none;
+}
