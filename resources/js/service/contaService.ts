@@ -58,3 +58,18 @@ export const cancelarTransferenciaApi = async (id: number) => {
     });
     return response;
 }
+export const cancelarDepositoApi = async (id: number) => {
+    const tokenCsrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    const response = await axios({
+        url: `${baseUrl}/depositos/cancelar`,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': tokenCsrf
+        },
+        data: JSON.stringify({id}),
+    });
+    return response;
+}

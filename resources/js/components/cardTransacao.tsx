@@ -1,10 +1,11 @@
-import { cancelarTransferenciaApi } from "@/service/contaService";
+import { cancelarDepositoApi, cancelarTransferenciaApi } from "@/service/contaService";
 import { formatarMoeda } from "@/service/globalService";
 import { Transacao } from "@/types";
 import { useState } from "react";
 
 export default function CardTransacao({ transacao }: { transacao: Transacao }) {
     const [ cancelado, setCancelado ] = useState(transacao.status === 'Cancelado' || transacao.status === 'Cancelada');
+
     const cancelarTransferencia = async (id: number) => {
         const confirmacao = confirm('Tem certeza que deseja cancelar essa transferência?');
         if(!confirmacao) return;
@@ -19,6 +20,29 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
                 alert('Transferência cancelada com sucesso!');
                 break;
         } 
+    }
+    const cancelarDeposito = async (id: number) => {
+        const confirmacao = confirm('Tem certeza que deseja cancelar esse depósito?');
+        if(!confirmacao) return;
+        
+        const response = await cancelarDepositoApi(id);
+        switch(response.status) {
+            case 200:
+                alert(response.data.mensagem);
+                break;
+            case 204:
+                setCancelado(true);
+                alert('Deposito cancelado com sucesso!');
+                break;
+        } 
+    }
+
+     const cancelarTransacao = (transacao: Transacao) => {
+        if(transacao.tipo === 'Depósito') {
+            cancelarDeposito(transacao.id)
+        } else {
+            cancelarTransferencia(transacao.id);
+        }
     }
     return (
         <div key={transacao.id} className="flex items-center justify-between p-3 rounded-lg border border-gray-200 rounded-xl">
@@ -41,7 +65,7 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
                     </div>
                     <div className="text-sm text-gray-500">{transacao.data_hora_criacao}</div>
                 </div>
-                {!cancelado && <button type="button" onClick={() => cancelarTransferencia(transacao.id)} className="text-sm text-gray-500 :hover:underline :hover:text-gray-600 :hover:cursor-pointer">Cancelar</button>}
+                {!cancelado && <button type="button" onClick={() => cancelarTransacao(transacao)} className="text-sm text-gray-500 :hover:underline :hover:text-gray-600 :hover:cursor-pointer">Cancelar</button>}
             </div>
         </div>
     )

@@ -18,4 +18,9 @@ class Deposito extends Model
         'descricao',
         'status'
     ];
+
+    public function cancelar() {
+        $this->status = 'Cancelado';
+        return $this->save();
+    }
 }

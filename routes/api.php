@@ -12,6 +12,7 @@ Route::prefix('v1')->group(function() {
 
     Route::middleware('auth:sanctum')->group(function() {
         Route::post('/conta/depositos', [DepositoController::class, 'realizarDeposito']);
+        Route::post('/conta/depositos/cancelar', [DepositoController::class, 'cancelarDeposito']);
         Route::post('/conta/transferencias', [TransferenciaController::class, 'realizarTransferencia']);
         Route::post('/conta/transferencias/cancelar', [TransferenciaController::class, 'cancelarTransferencia']);
         Route::get('/conta/transacoes', [UsuarioController::class, 'transacoes']);

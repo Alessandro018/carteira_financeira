@@ -44,4 +44,32 @@ class DepositoController extends Controller
         $usuario->atualizarSaldo($deposito->valor);
         return response()->json([], 201);
     }
+
+    public function cancelarDeposito(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+        ], [
+            'id.required' => 'O campo id é obrigatório',
+        ]);
+
+        $deposito = $request->user()->depositos()->where('id', '=', $request->id)->first();
+        if(!$deposito) {
+            return response()->json([
+                'sucesso' => false,
+                'mensagem' => 'Depósito não encontrado'
+            ]);
+        }
+
+        $depositoCancelado = $deposito->cancelar();
+        if(!$depositoCancelado) {
+            return response()->json([
+                'sucesso' => false,
+                'mensagem' => 'Não foi possível cancelar o depósito'
+            ]);
+        }
+
+        $request->user()->atualizarSaldo(-$deposito->valor);
+        return response()->json([], 204);
+    }
 }
