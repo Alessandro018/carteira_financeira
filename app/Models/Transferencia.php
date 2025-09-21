@@ -17,4 +17,9 @@ class Transferencia extends Model
         'descricao',
         'status'
     ];
+
+    public function cancelar() {
+        $this->status = 'Cancelada';
+        return $this->save();
+    }
 }

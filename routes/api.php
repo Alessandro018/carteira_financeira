@@ -11,8 +11,9 @@ Route::prefix('v1')->group(function() {
     Route::post('/conta/sair', [AutenticacaoController::class, 'encerrarSessao']);
 
     Route::middleware('auth:sanctum')->group(function() {
-        Route::post('/conta/deposito', [DepositoController::class, 'realizarDeposito']);
-        Route::post('/conta/transferencia', [TransferenciaController::class, 'realizarTransferencia']);
+        Route::post('/conta/depositos', [DepositoController::class, 'realizarDeposito']);
+        Route::post('/conta/transferencias', [TransferenciaController::class, 'realizarTransferencia']);
+        Route::post('/conta/transferencias/cancelar', [TransferenciaController::class, 'cancelarTransferencia']);
         Route::get('/conta/transacoes', [UsuarioController::class, 'transacoes']);
         Route::get('/conta/saldo', [UsuarioController::class, 'saldo']);
     });

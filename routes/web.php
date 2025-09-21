@@ -13,13 +13,13 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/dashboard', function () {
         return Inertia::render('dashboard');
     });
-    Route::get('/transferencia', function () {
+    Route::get('/transferir', function () {
         return Inertia::render('transferencia');
     });
-    Route::get('/deposito', function () {
+    Route::get('/depositar', function () {
         return Inertia::render('deposito');
     });
-    Route::get('/transacao', function () {
+    Route::get('/transacoes', function () {
         return Inertia::render('transacao');
     });
 });

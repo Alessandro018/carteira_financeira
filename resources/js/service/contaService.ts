@@ -14,7 +14,7 @@ export const depositarApi = async (payload: DepositoPayload) => {
     const tokenCsrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     const response = await axios({
-        url: `${baseUrl}/deposito`,
+        url: `${baseUrl}/depositos`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const transferirApi = async (payload: TransferenciaPayload) => {
     const tokenCsrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     const response = await axios({
-        url: `${baseUrl}/transferencia`,
+        url: `${baseUrl}/transferencias`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -40,6 +40,21 @@ export const transferirApi = async (payload: TransferenciaPayload) => {
             'X-CSRF-TOKEN': tokenCsrf
         },
         data: JSON.stringify(payload),
+    });
+    return response;
+}
+export const cancelarTransferenciaApi = async (id: number) => {
+    const tokenCsrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    const response = await axios({
+        url: `${baseUrl}/transferencias/cancelar`,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': tokenCsrf
+        },
+        data: JSON.stringify({id}),
     });
     return response;
 }

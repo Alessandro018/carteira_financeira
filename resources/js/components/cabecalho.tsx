@@ -33,13 +33,13 @@ export default function Cabecalho() {
                     <BotaoAcao navegarPara="/dashboard" className={rota === "/dashboard" ? "btn-navegacao-ativo" : ""}>
                         <span>Inicial</span>
                     </BotaoAcao>
-                    <BotaoAcao navegarPara="/deposito" className={rota === "/deposito" ? "btn-navegacao-ativo" : ""}>
+                    <BotaoAcao navegarPara="/depositar" className={rota === "/deposito" ? "btn-navegacao-ativo" : ""}>
                         <span>Depositar</span>
                     </BotaoAcao>
-                    <BotaoAcao navegarPara="/transferencia" className={rota === "/transferencia" ? "btn-navegacao-ativo" : ""}>
+                    <BotaoAcao navegarPara="/transferir" className={rota === "/transferencia" ? "btn-navegacao-ativo" : ""}>
                         <span>Transferir</span>
                     </BotaoAcao>
-                    <BotaoAcao navegarPara="/transacao" className={rota === "/transacoes" ? "btn-navegacao-ativo" : ""}>
+                    <BotaoAcao navegarPara="/transacoes" className={rota === "/transacoes" ? "btn-navegacao-ativo" : ""}>
                         <span>Transações</span>
                     </BotaoAcao>
                 </section>
