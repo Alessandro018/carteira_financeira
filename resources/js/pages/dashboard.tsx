@@ -8,19 +8,21 @@ import { useEffect, useState } from "react";
 export default function Dashboard() {
     const [receitas, setReceitas] = useState<Deposito[]>([]);
     const [saldo, setSaldo] = useState(0);
-    // const [quantidadeTransicoes, setQuantidadeTransacoes] = useState(0);
+    const dataAtual = new Date();
+    const dataInicio = `${dataAtual.getFullYear()}-${dataAtual.getMonth() + 1}-01`;
+    const dataFim = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0).toISOString().slice(0, 10);
     const [totalReceitas, setTotalReceitas] = useState(0);
     const [totalDespesas, setTotalDespesas] = useState(0);
 
     useEffect(() => {
         (async () => {
-            const buscarTransacoes = await transacoesApi();
+            const buscarTransacoes = await transacoesApi({dataInicio: dataInicio, dataFim: dataFim});
             const buscarSaldo = await saldoApi();
             setReceitas(buscarTransacoes.depositos);
             setSaldo(buscarSaldo);
 
-            const calcularReceitas = buscarTransacoes.depositos.length > 0 ? buscarTransacoes.depositos!.reduce((valor, deposito) => valor + deposito.valor, 0) : 0;
-            const calcularDespesas = buscarTransacoes.transferencias.length > 0 ? buscarTransacoes.transferencias!.reduce((valor, transferencia) => valor + transferencia.valor, 0) : 0;
+            const calcularReceitas =buscarTransacoes.depositos!.reduce((valor, deposito) => valor + (deposito.status != 'Cancelado' ? deposito.valor : 0), 0);
+            const calcularDespesas = buscarTransacoes.transferencias!.reduce((valor, transferencia) => valor + (transferencia.status != 'Cancelada' ? transferencia.valor : 0), 0);
             setTotalReceitas(calcularReceitas);
             setTotalDespesas(calcularDespesas);
         })();

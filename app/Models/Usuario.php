@@ -35,18 +35,24 @@ class Usuario extends Authenticatable
     {
         return Hash::check($senha, $this->senha);
     }
-    
-    public function depositos()
-    {
-        return $this->hasMany(Deposito::class);
-    }
     public function atualizarSaldo(float $valor)
     {
         $this->saldo += $valor;
         $this->save();
     }
-    public function transferencias()
+    
+    public function depositos(string $data, ?string $dataFim)
     {
-        return $this->hasMany(Transferencia::class);
+        $depositos = Deposito::where('usuario_id', $this->id);
+        $depositosFiltrados = $dataFim ? $depositos->whereDate('data_hora_criacao', ">=", $data)->whereDate('data_hora_criacao', "<=", $dataFim)->get() : 
+            $depositos->whereDate('data_hora_criacao', $data)->get();
+        return $depositosFiltrados;
+    }
+    public function transferencias(string $data, ?string $dataFim)
+    {
+        $transferencias = Transferencia::where('usuario_id', $this->id);
+        $transferenciasFiltradas = $dataFim ? $transferencias->whereDate('data_hora_criacao', '>=', $data)->whereDate('data_hora_criacao', "<=", $dataFim)->get() :
+            $transferencias->whereDate('data_hora_criacao', $data)->get();
+        return $transferenciasFiltradas;
     }
 }

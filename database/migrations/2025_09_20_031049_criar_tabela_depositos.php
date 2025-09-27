@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('depositos', function (Blueprint $table) {
             $table->id();
             $table->integer('usuario_id');
-            $table->integer('valor');
+            $table->double('valor');
             $table->string('descricao', 80)->nullable();
             $table->enum('status', ['Pendente', 'Concluido', 'Cancelado'])->default('Concluido');
-            $table->date('data_hora_criacao')->useCurrent();
-            $table->date('data_hora_atualizacao')->useCurrent();
+            $table->datetime('data_hora_criacao')->useCurrent();
+            $table->datetime('data_hora_atualizacao')->useCurrent();
         });
     }
 

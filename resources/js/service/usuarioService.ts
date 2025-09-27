@@ -42,10 +42,10 @@ export const autenticarApi = async (payload: AutenticarPayload) => {
     })
     return response;
 }
-export const transacoesApi = async () => {
+export const transacoesApi = async ({dataInicio, dataFim}: {dataInicio: string, dataFim?: string}) => {
     const tokenCsrf = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     const response = await axios({
-        url: `${baseUrl}/transacoes`,
+        url: `${baseUrl}/transacoes?dataInicio=${dataInicio}` + (dataFim ? `&dataFim=${dataFim}` : ''),
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

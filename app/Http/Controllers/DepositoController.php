@@ -16,7 +16,7 @@ class DepositoController extends Controller
         ], [
             'valor.required' => 'O campo valor é obrigatório',
             'valor.numeric' => 'O campo valor deve ser um número válido',
-            'descricao.max' => 'O campo descrição deve ter no máximo 80 caracteres'
+            'descricao.max' => 'O campo descrição deve ter no máximo :max caracteres'
         ]);
 
         if($validarDados['valor'] <= 0) {

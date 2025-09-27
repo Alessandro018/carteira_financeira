@@ -1,5 +1,5 @@
 import { cancelarDepositoApi, cancelarTransferenciaApi } from "@/service/contaService";
-import { formatarMoeda } from "@/service/globalService";
+import { formatarHora, formatarMoeda } from "@/utils/global";
 import { Transacao } from "@/types";
 import { useState } from "react";
 
@@ -63,7 +63,7 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
                     <div className={`font-medium ${transacao.tipo === 'Depósito' ? 'text-green-600' : 'text-red-600'}`}>
                         {formatarMoeda(transacao.valor)}
                     </div>
-                    <div className="text-sm text-gray-500">{transacao.data_hora_criacao}</div>
+                    <div className="text-sm text-gray-500">{formatarHora(transacao.data_hora_criacao)}</div>
                 </div>
                 {!cancelado && <button type="button" onClick={() => cancelarTransacao(transacao)} className="text-sm text-gray-500 :hover:underline :hover:text-gray-600 :hover:cursor-pointer">Cancelar</button>}
             </div>

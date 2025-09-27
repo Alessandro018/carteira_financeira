@@ -1,6 +1,6 @@
 import { Usuario } from "@/types";
 import BotaoAcao from "./botaoAcao";
-import { formatarMoeda } from "@/service/globalService";
+import { formatarMoeda } from "@/utils/global";
 import { useEffect, useState } from "react";
 import { saldoApi } from "@/service/usuarioService";
 

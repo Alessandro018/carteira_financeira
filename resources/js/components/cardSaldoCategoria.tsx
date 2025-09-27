@@ -1,4 +1,4 @@
-import { formatarMoeda } from "@/service/globalService";
+import { formatarMoeda } from "@/utils/global";
 
 export default function CardSaldoCategoria({ titulo, valor}: { titulo: string, valor: number}) {
     return (

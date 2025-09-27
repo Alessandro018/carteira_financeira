@@ -1,4 +1,4 @@
-import { formatarMoeda } from "@/service/globalService";
+import { formatarMoeda } from "@/utils/global";
 
 interface ResumoProps {
     saldo: number,

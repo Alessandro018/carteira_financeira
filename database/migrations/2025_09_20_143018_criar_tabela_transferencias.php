@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->integer('usuario_id');
             $table->integer('usuario_destino_id');
-            $table->integer('valor');
+            $table->double('valor');
             $table->string('descricao', 80)->nullable();
             $table->enum('status', ['Pendente', 'Concluida', 'Cancelada'])->default('Concluida');
             $table->datetime('data_hora_criacao')->useCurrent();
