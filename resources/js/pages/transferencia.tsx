@@ -10,7 +10,7 @@ export default function PaginaTransferencia() {
     const [transferindo, setTransferindo] = useState(false);
     const [erros, setErros] = useState<{ [key: string]: string[] }>({});
 
-    const transferir = async (event: React.FormEvent) => {
+    async function transferir(event: React.FormEvent) {
         event.preventDefault();
 
         setTransferindo(true);
@@ -50,7 +50,7 @@ export default function PaginaTransferencia() {
                         <form onSubmit={(event) => transferir(event)} className="space-y-3">
                             <div>
                                 <label className="block text-sm font-medium mb-1">Para</label>
-                                <Input type="email" ref={referenciaCampoEmail} placeholder="Nome ou e-mail do destinatário"
+                                <Input type="email" ref={referenciaCampoEmail} placeholder="E-mail do destinatário"
                                    erro={erros.email?.[0]} required/>
                             </div>
                             <div>

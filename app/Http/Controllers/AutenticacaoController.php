@@ -64,6 +64,7 @@ class AutenticacaoController extends Controller
         $usuario = $request->user();
 
         return response()->json([
+            'id' => $usuario->id,
             'nome' => $usuario->nome,
             'email' => $usuario->email
         ]);

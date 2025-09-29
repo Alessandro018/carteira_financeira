@@ -1,6 +1,7 @@
 import Input from "@/components/ui/input";
 import { autenticarApi } from "@/service/usuarioService";
 import { useRef, useState } from "react";
+import axios from "axios";
 
 export default function Login() {
     const referenciaCampoEmail = useRef<HTMLInputElement>(null);
@@ -8,10 +9,11 @@ export default function Login() {
     const [autenticando, setAutenticando] = useState(false);
     const [erros, setErros] = useState<{ [key: string]: string[] }>({});
 
-    const autenticar = async (event: React.FormEvent) => {
+    async function autenticar(event: React.FormEvent) {
         event.preventDefault();
-
         setAutenticando(true);
+
+        await axios.get('/sanctum/csrf-cookie');
         const email = referenciaCampoEmail.current!.value;
         const senha = referenciaCampoSenha.current!.value;
         const response = await autenticarApi({email: email, senha: senha}).catch((error) => {
@@ -29,8 +31,7 @@ export default function Login() {
             }
         }
         if(response?.data?.email) {
-            sessionStorage.setItem('usuario_carteira', JSON.stringify(response.data));
-            window.location.href = '/dashboard';
+            location.href = '/dashboard';
         }
     }
 

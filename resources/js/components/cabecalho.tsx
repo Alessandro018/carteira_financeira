@@ -1,11 +1,11 @@
-import { Usuario } from "@/types";
 import BotaoAcao from "./botaoAcao";
 import { formatarMoeda } from "@/utils/global";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { saldoApi } from "@/service/usuarioService";
+import { ContextoAplicacao } from "@/context/contextoAutenticacao";
 
 export default function Cabecalho() {
-    const usuario = JSON.parse(`${sessionStorage!.getItem('usuario_carteira')}`) as Usuario;
+    const contextoApp = useContext(ContextoAplicacao);
     const [saldo, setSaldo] = useState(0);
     const rota = location.pathname;
 
@@ -21,7 +21,7 @@ export default function Cabecalho() {
             <header className="flex items-center justify-between">
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-semibold">Carteira</h1>
-                    <p className="text-md text-gray-500">Olá, {usuario.nome}!</p>
+                    <p className="text-md text-gray-500">Olá, {contextoApp?.usuario?.nome}!</p>
                 </div>
                 <div className="text-right">
                     <p className="text-sm text-gray-500">Saldo disponível</p>
@@ -33,10 +33,10 @@ export default function Cabecalho() {
                     <BotaoAcao navegarPara="/dashboard" className={rota === "/dashboard" ? "btn-navegacao-ativo" : ""}>
                         <span>Inicial</span>
                     </BotaoAcao>
-                    <BotaoAcao navegarPara="/depositar" className={rota === "/deposito" ? "btn-navegacao-ativo" : ""}>
+                    <BotaoAcao navegarPara="/depositar" className={rota === "/depositar" ? "btn-navegacao-ativo" : ""}>
                         <span>Depositar</span>
                     </BotaoAcao>
-                    <BotaoAcao navegarPara="/transferir" className={rota === "/transferencia" ? "btn-navegacao-ativo" : ""}>
+                    <BotaoAcao navegarPara="/transferir" className={rota === "/transferir" ? "btn-navegacao-ativo" : ""}>
                         <span>Transferir</span>
                     </BotaoAcao>
                     <BotaoAcao navegarPara="/transacoes" className={rota === "/transacoes" ? "btn-navegacao-ativo" : ""}>

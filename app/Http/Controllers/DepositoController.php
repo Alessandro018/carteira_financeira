@@ -53,7 +53,9 @@ class DepositoController extends Controller
             'id.required' => 'O campo id é obrigatório',
         ]);
 
-        $deposito = $request->user()->depositos()->where('id', '=', $request->id)->first();
+        $usuario = $request->user();
+        $deposito = Deposito::where('id', '=', $request->id)->where('usuario_id', '=', $usuario->id)->first();
+        
         if(!$deposito) {
             return response()->json([
                 'sucesso' => false,

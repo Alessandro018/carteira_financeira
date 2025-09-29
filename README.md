@@ -60,7 +60,7 @@ Aplicação web de carteira financeira construída com **Laravel 12 + React + Ty
 
     ````bash
     composer install
-- Se você estiver executando no windows, talves você possa ter algum problema como esse:
+- Se você estiver realizando no windows, talvez você possa ter algum problema como esse:
   <img width="955" height="259" alt="image" src="https://github.com/user-attachments/assets/79effff0-ebc3-4049-b050-7c2457308a91" />
   - Para tentar resolver, execute os seguintes comandos no Windows PowerShell:
       ````bash

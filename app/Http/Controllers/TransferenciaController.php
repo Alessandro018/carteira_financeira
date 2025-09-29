@@ -87,7 +87,10 @@ class TransferenciaController extends Controller
             'id.required' => 'O campo id é obrigatório',
         ]);
 
-        $transferencia = $request->user()->transferencias()->where('id', '=', $request->id)->first();
+        $usuario = $request->user();
+        $transferencia = Transferencia::where('id', '=', $request->id)
+        ->where(fn($query) => $query->where('usuario_id', '=', $usuario->id)->orWhere('usuario_destino_id', '=', $usuario->id ))->first();
+        
         if(!$transferencia) {
             return response()->json([
                 'sucesso' => false,
@@ -96,6 +99,7 @@ class TransferenciaController extends Controller
         }
 
         $transferenciaCancelada = $transferencia->cancelar();
+        
         if(!$transferenciaCancelada) {
             return response()->json([
                 'sucesso' => false,
@@ -103,9 +107,16 @@ class TransferenciaController extends Controller
             ]);
         }
 
-        $request->user()->atualizarSaldo($transferencia->valor);
-        $usuarioDestino = Usuario::find($transferencia->usuario_destino_id);
-        $usuarioDestino->atualizarSaldo(-$transferencia->valor);
+        
+        if($transferencia->usuario_id == $usuario->id) {
+            $usuarioDestino = Usuario::find($transferencia->usuario_destino_id);
+            $usuario->atualizarSaldo($transferencia->valor);
+            $usuarioDestino->atualizarSaldo(-$transferencia->valor);
+        } else {
+            $usuarioOrigem = Usuario::find($transferencia->usuario_id);
+            $usuario->atualizarSaldo(-$transferencia->valor);
+            $usuarioOrigem->atualizarSaldo($transferencia->valor);
+        }
         return response()->json([], 204);
     }
 }

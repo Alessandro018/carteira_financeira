@@ -9,7 +9,7 @@ export default function PaginaDeposito() {
     const [depositando, setDepositando] = useState(false);
     const [erros, setErros] = useState<{ [key: string]: string[] }>({});
 
-    const depositar = async (event: React.FormEvent) => {
+    async function depositar(event: React.FormEvent) {
         event.preventDefault();
 
         setDepositando(true);

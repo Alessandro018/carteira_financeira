@@ -10,7 +10,7 @@ export default function PaginaTransferencia() {
     const [cadastrando, setCadastrando] = useState(false);
     const [erros, setErros] = useState<{ [key: string]: string[] }>({});
 
-    const cadastrar = async (event: React.FormEvent) => {
+    async function cadastrar(event: React.FormEvent) {
         event.preventDefault();
 
         const nome = referenciaCampoNome.current!.value;

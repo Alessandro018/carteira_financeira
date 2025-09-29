@@ -1,11 +1,13 @@
 import Cabecalho from "@/components/cabecalho";
 import CardSaldoCategoria from "@/components/cardSaldoCategoria";
 import Resumo from "@/components/resumo";
+import { ContextoAplicacao } from "@/context/contextoAutenticacao";
 import { saldoApi, transacoesApi } from "@/service/usuarioService";
 import { Deposito } from "@/types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Dashboard() {
+    const contextoApp = useContext(ContextoAplicacao);
     const [receitas, setReceitas] = useState<Deposito[]>([]);
     const [saldo, setSaldo] = useState(0);
     const dataAtual = new Date();
@@ -21,8 +23,18 @@ export default function Dashboard() {
             setReceitas(buscarTransacoes.depositos);
             setSaldo(buscarSaldo);
 
-            const calcularReceitas =buscarTransacoes.depositos!.reduce((valor, deposito) => valor + (deposito.status != 'Cancelado' ? deposito.valor : 0), 0);
-            const calcularDespesas = buscarTransacoes.transferencias!.reduce((valor, transferencia) => valor + (transferencia.status != 'Cancelada' ? transferencia.valor : 0), 0);
+            console.log(contextoApp?.usuario?.id);
+            let calcularReceitas = buscarTransacoes.depositos!.reduce((valor, deposito) => valor + (deposito.status == 'Concluido' ? deposito.valor : 0), 0);
+            const calcularDespesas = buscarTransacoes.transferencias!.reduce((valor, transferencia) => {
+                if(transferencia.status == 'Concluida') {
+                    if(transferencia.usuario_destino_id== contextoApp?.usuario?.id) {
+                        calcularReceitas += transferencia.valor;
+                        return 0;
+                    }
+                    return valor + transferencia.valor;
+                }
+                return 0
+            }, 0);
             setTotalReceitas(calcularReceitas);
             setTotalDespesas(calcularDespesas);
         })();

@@ -50,7 +50,7 @@ class Usuario extends Authenticatable
     }
     public function transferencias(string $data, ?string $dataFim)
     {
-        $transferencias = Transferencia::where('usuario_id', $this->id);
+        $transferencias = Transferencia::where('usuario_id', $this->id)->orWhere('usuario_destino_id', $this->id);
         $transferenciasFiltradas = $dataFim ? $transferencias->whereDate('data_hora_criacao', '>=', $data)->whereDate('data_hora_criacao', "<=", $dataFim)->get() :
             $transferencias->whereDate('data_hora_criacao', $data)->get();
         return $transferenciasFiltradas;

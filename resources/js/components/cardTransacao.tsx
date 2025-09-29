@@ -1,12 +1,15 @@
 import { cancelarDepositoApi, cancelarTransferenciaApi } from "@/service/contaService";
 import { formatarHora, formatarMoeda } from "@/utils/global";
 import { Transacao } from "@/types";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ContextoAplicacao } from "@/context/contextoAutenticacao";
 
 export default function CardTransacao({ transacao }: { transacao: Transacao }) {
+    const contextoApp = useContext(ContextoAplicacao);
     const [ cancelado, setCancelado ] = useState(transacao.status === 'Cancelado' || transacao.status === 'Cancelada');
+    const [corTextoValor, setCorTextoValor] = useState('text-gray-500');
 
-    const cancelarTransferencia = async (id: number) => {
+    async function cancelarTransferencia(id: number) {
         const confirmacao = confirm('Tem certeza que deseja cancelar essa transferência?');
         if(!confirmacao) return;
         
@@ -21,7 +24,7 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
                 break;
         } 
     }
-    const cancelarDeposito = async (id: number) => {
+    async function cancelarDeposito(id: number) {
         const confirmacao = confirm('Tem certeza que deseja cancelar esse depósito?');
         if(!confirmacao) return;
         
@@ -37,7 +40,23 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
         } 
     }
 
-     const cancelarTransacao = (transacao: Transacao) => {
+    function alterarCor() {
+        if(cancelado) {
+            setCorTextoValor('text-gray-500');
+            return;
+        }
+        if(transacao.tipo === 'Depósito' || transacao?.usuario_destino_id == contextoApp?.usuario?.id) {
+            setCorTextoValor('text-green-600');
+        } else {
+            setCorTextoValor('text-red-600');
+        }
+    }
+
+    useEffect(() => {
+        alterarCor();
+    }, [cancelado]);
+
+    async function cancelarTransacao(transacao: Transacao) {
         if(transacao.tipo === 'Depósito') {
             cancelarDeposito(transacao.id)
         } else {
@@ -45,7 +64,10 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
         }
     }
     return (
-        <div key={transacao.id} className="flex items-center justify-between p-3 rounded-lg border border-gray-200 rounded-xl">
+        <div 
+            key={transacao.id}
+            className={`flex items-center justify-between p-3 rounded-lg border border-gray-200 rounded-xl ${cancelado && 'bg-gray-100'}`}
+        >
             <div>
                 <div className="flex items-center gap-3">
                     <div
@@ -60,7 +82,7 @@ export default function CardTransacao({ transacao }: { transacao: Transacao }) {
             </div>
             <div className="flex justify-between gap-6">
                 <div className="text-right">
-                    <div className={`font-medium ${transacao.tipo === 'Depósito' ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`font-medium ${corTextoValor} ${cancelado && 'line-through'}`}>
                         {formatarMoeda(transacao.valor)}
                     </div>
                     <div className="text-sm text-gray-500">{formatarHora(transacao.data_hora_criacao)}</div>
